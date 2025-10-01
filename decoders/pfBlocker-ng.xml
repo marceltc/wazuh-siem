@@ -1,0 +1,42 @@
+<!--
+  -  pfBlocker-ng Ruleset
+  -  Created by Marcel Truong-Chun
+  Example events:
+  Sep 29 21:15:30 pfSense pfb_dnsbl: 29 21:15:29,blocked.example.com,10.57.3.2,Python,DNSBL,DNSBL_Groupname,blocked.example.com,BlockList,-
+  Sep 29 20:50:25 pfSense pfb_ipbl: Aug 22 08:59:56,1770008520,igb1,LAN,block,4,6,TCP-S,192.168.1.4,192.0.2.4,65036,443,out,Unk,pfB_PRI1_v4,192.0.2.4/24,BlockList_v4,Unknown,Mac,null,+
+-->
+
+<!-- Matches dnsbl.log entries -->
+<decoder name="pfb_dnsbl">
+  <program_name>pfb_dnsbl</program_name>
+</decoder>
+
+<decoder name="pfb-dnsbl-fields">
+  <parent>pfb_dnsbl</parent>
+  <regex>^\S*\s+\S*,(\S*),(\S*),\S*,\S*,(\S*),\S*,(\S*),\S</regex>
+  <order>fqdn,srcip,dnsblgroup,dnsblsource</order>
+</decoder>
+
+
+<!-- Matches ip_block.log entries -->
+<decoder name="pfb_ipbl">
+  <program_name>pfb_ipbl</program_name>
+</decoder>
+
+<decoder name="pfb-ipbl-fields">
+  <parent>pfb_ipbl</parent>
+  <regex>^\S*\s+\S*\s+\S*,(\d*),\S*,\S*,(\S*),\d*,\d*,(\S*),</regex>
+  <order>id,action,protocol</order>
+</decoder>
+
+<decoder name="pfb-ipbl-fields">
+  <parent>pfb_ipbl</parent>
+  <regex offset="after_regex">(\S*),(\S*),(\d*),(\d*),(\S*),(\S*),</regex>
+  <order>srcip,dstip,srcport,dstport,direction,geoip</order>
+</decoder>
+
+<decoder name="pfb-ipbl-fields">
+  <parent>pfb_ipbl</parent>
+  <regex offset="after_regex">(\S*),\S*,(\S*),\S*,\S*,\S*,\S$</regex>
+  <order>ipblcollection,ipbllist</order>
+</decoder>
