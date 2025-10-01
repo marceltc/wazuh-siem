@@ -1,0 +1,28 @@
+<!--
+  -  pfBlocker-ng Ruleset
+  -  Created by Marcel Truong-Chun
+-->
+
+<group name="pfblocker,">
+  <rule id="100020" level="1">
+    <program_name>pfb_dnsbl</program_name>
+    <description>pfBlocker-ng DNSBL blocked DNS request</description>
+    <options>no_log</options>
+  </rule>
+
+  <rule id="100021" level="5" frequency="10" timeframe="300">
+    <if_matched_sid>100020</if_matched_sid>
+    <description>pfBlocker-ng blocked repeated DNS request.</description>
+  </rule>
+
+  <rule id="100022" level="10" ignore="60">
+    <program_name>pfb_dnsbl</program_name>
+    <field name="dnsblgroup">\S*(?i)phishing|malicious\S*</field>
+    <description>pfBlocker-ng blocked malicious or phishing DNSBL groups.</description>
+  </rule>
+
+  <rule id="100023" level="10">
+    <program_name>pfb_ipbl</program_name>
+    <description>pfBlocker-ng blocked IP</description>
+  </rule>
+</group>
