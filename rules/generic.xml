@@ -1,0 +1,13 @@
+<!-- 
+  -  General-purpse ruleset
+  -  Created by Marcel Truong-Chun
+-->
+<group name="custom_tuning,">
+
+  <rule id="100010" level="0">
+    <if_sid>531</if_sid>
+      <regex>'df -P':\s+/dev/loop\d+\s+\d+\s+\d+\s+0\s+100%</regex>
+      <description>Ignore loop disks because they are always at 100% of capacity</description>
+  </rule>
+
+</group>
